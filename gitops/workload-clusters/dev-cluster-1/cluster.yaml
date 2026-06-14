@@ -37,8 +37,15 @@ spec:
     infrastructureRef:
       apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
       kind: AWSMachineTemplate
-      name: dev-cluster-1-control-plane-v2
+      name: dev-cluster-1-control-plane-v3
   kubeadmConfigSpec:
+    preKubeadmCommands:
+      - curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+      - echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' > /etc/apt/sources.list.d/kubernetes.list
+      - apt-get update
+      - apt-get install -y kubelet kubeadm kubectl
+      - apt-mark hold kubelet kubeadm kubectl
+      - systemctl enable kubelet
     initConfiguration:
       nodeRegistration:
         name: "{{ ds.meta_data.local_hostname }}"
@@ -60,7 +67,7 @@ spec:
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
 kind: AWSMachineTemplate
 metadata:
-  name: dev-cluster-1-control-plane-v2
+  name: dev-cluster-1-control-plane-v3
   namespace: default
 spec:
   template:
@@ -95,12 +102,12 @@ spec:
       infrastructureRef:
         apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
         kind: AWSMachineTemplate
-        name: dev-cluster-1-md-0-v2
+        name: dev-cluster-1-md-0-v3
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
 kind: AWSMachineTemplate
 metadata:
-  name: dev-cluster-1-md-0-v2
+  name: dev-cluster-1-md-0-v3
   namespace: default
 spec:
   template:
@@ -121,6 +128,13 @@ metadata:
 spec:
   template:
     spec:
+      preKubeadmCommands:
+        - curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+        - echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' > /etc/apt/sources.list.d/kubernetes.list
+        - apt-get update
+        - apt-get install -y kubelet kubeadm kubectl
+        - apt-mark hold kubelet kubeadm kubectl
+        - systemctl enable kubelet
       joinConfiguration:
         nodeRegistration:
           name: "{{ ds.meta_data.local_hostname }}"
