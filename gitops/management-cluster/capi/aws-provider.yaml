@@ -3,7 +3,7 @@ kind: InfrastructureProvider
 metadata:
   name: aws
   namespace: capi-operator-system
-  annotations:
-    argocd.argoproj.io/sync-wave: "2"
 spec:
   version: v2.7.1
+  configSecret:
+    name: capa-manager-bootstrap-credentials
