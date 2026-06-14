@@ -66,6 +66,8 @@ spec:
   template:
     spec:
       instanceType: t3.small
+      ami:
+        id: ami-0326c8c1e2d6bf78c
       iamInstanceProfile: "control-plane.cluster-api-provider-aws.sigs.k8s.io"
       sshKeyName: ""
 ---
@@ -102,6 +104,8 @@ spec:
   template:
     spec:
       instanceType: t3.small
+      ami:
+        id: ami-0326c8c1e2d6bf78c
       iamInstanceProfile: "nodes.cluster-api-provider-aws.sigs.k8s.io"
       sshKeyName: ""
 ---
